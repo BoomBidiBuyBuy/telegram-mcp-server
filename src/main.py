@@ -6,6 +6,7 @@ from fastmcp import FastMCP
 from telegram import Bot
 from telegram.error import TelegramError
 
+from starlette.responses import JSONResponse
 
 import envs
 
@@ -30,6 +31,11 @@ async def send_message_to_user(
         return f"Failed to send message: {exc}"
 
     return "Message sent successfully"
+
+
+@mcp_server.custom_route("/health", methods=["GET"])
+async def http_health_check(request):
+    return JSONResponse({"status": "healthy", "service": "telegram-agent-mcp"})
 
 
 def main():
